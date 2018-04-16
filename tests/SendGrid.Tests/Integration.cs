@@ -6003,6 +6003,24 @@
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
+
+        [Fact]
+        public void TestRFC2822EmailAddress()
+        {
+            var msg = new SendGridMessage();
+            msg.AddTo(new EmailAddress("test example <test@example.com>", true));
+            Debug.WriteLine(msg.Serialize());
+            Assert.True(msg.Serialize() == "{\"personalizations\":[{\"to\":[{\"name\":\"test example\",\"email\":\"test@example.com\"}]}]}");
+        }
+
+        [Fact]
+        public void TestEmailAddressWithoutName()
+        {
+            var msg = new SendGridMessage();
+            msg.AddTo(new EmailAddress("test@example.com", false));
+            Debug.WriteLine(msg.Serialize());
+            Assert.True(msg.Serialize() == "{\"personalizations\":[{\"to\":[{\"email\":\"test@example.com\"}]}]}");
+        }
     }
 
     public class FakeWebProxy : IWebProxy

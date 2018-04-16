@@ -32,6 +32,26 @@ namespace SendGrid.Helpers.Mail
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="EmailAddress"/> class.
+        /// </summary>
+        /// <param name="emailWithName">The email address of the sender or recipient with name</param>
+        /// <param name="isRFC822Address">Denotes whether the email address is RFC822 compliant,it should be true if email address contains name</param>
+        public EmailAddress(string emailWithName, bool isRFC822Address)
+        {
+            if (isRFC822Address)
+            {
+                var address = MailHelper.StringToEmailAddress(emailWithName);
+                this.Email = address.Email;
+                this.Name = address.Name;
+            }
+            else
+            {
+                this.Email = emailWithName;
+                this.Name = null;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the name of the sender or recipient.
         /// </summary>
         [JsonProperty(PropertyName = "name")]
